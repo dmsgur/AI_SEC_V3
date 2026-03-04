@@ -7,6 +7,7 @@
   
 2. 😍시계열 모델
     - source file
+      - crypto_coinrnn.py : lstm 모델 구성 및 훈련 파일
       - web_service.py : 플라스크 웹 라우팅
       - ai_tools(D) : ai 관련 모델 및 도구
         - interface_service.py : 모델 예측 서비스 연동 인터페이스
