@@ -15,6 +15,7 @@ def analize():
     #print(info_data)#보낼 데이터 생성하는 로직
     result = get_service_data(info_data)
     return jsonify(result)#결과 데이터 클라이언트로 송신부
+
 app.run(host="192.168.219.222",debug=True,port=1234)
 
 """
