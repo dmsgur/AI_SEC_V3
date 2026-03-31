@@ -9,7 +9,6 @@ $(()=>{
         let img_id = $(this).attr("info")
         if(current_id != img_id){
             current_id = img_id
-
             let img_path = `/static/images/${$(this).attr("info")}_img.png`
             console.log(img_path)
             $(".sec_img").css("display","none")
@@ -21,10 +20,16 @@ $(()=>{
         const info = $(this).attr("info")
         const container = $("#user_data")
         if(info=="coin"){
+            $("#analbtn").text("코인분석하기")
             container.html(coin_ui)
         }else if(info=="sms"){
+            $("#analbtn").text("문자분석하기")
             container.html(sms_ui)
             $("#sms_msg").val("")
+        }else if(info=="gen"){
+            container.html(gen_ui)
+            //????????????????????
+            $("#analbtn").text("이미지생성하기")
         }
         $("#anal_content h3").text($(this).attr("describ"));
         $(".coverui").css("display","block")
@@ -49,6 +54,10 @@ $(()=>{
                 return
             }
             datas = {information:"sms",sms_message:$("#sms_msg").val()}
+        }else if(information=="gen"){
+            datas = {information:"gen",
+            loc_val:$("#loc_val").val(),
+            scale_val:$("#scale_val").val()}
         }
         const res = await fetch("/analize",
             {method:"POST",
@@ -59,15 +68,32 @@ $(()=>{
             }
          )
         const resp = await res.json()
-        //console.log(resp)
+        console.log(resp)
         if(information=="coin"){
            create_coinui(resp)
         }else if(information=="sms"){
             create_smsui(resp,$("#sms_msg").val())
             $("#sms_msg").val("")
+        }else if(information=="gen"){
+            create_genui(resp)
         }
     })
 })
+function create_genui(img_path){
+    const jq_res = $("#result_data")
+    let inHtml = `<h4>생성이미지 표기</h4>`
+    if($("#result_data img").size()){
+        $("#result_data").append(
+            `<img src="/static/${img_path}"
+            style="width:96px;height:96px"/>`
+        )
+    }else{
+        inHtml+=`<img src="/static/${img_path}"
+            style="width:96px;height:96px"/>`
+        jq_res.html(inHtml)
+    }
+
+}
 function create_smsui(ui_datas,message){
     const jq_res = $("#result_data")
     let inHtml = `<h4>분석결과 표기</h4>`
@@ -223,6 +249,20 @@ const sms_ui = `
          style="margin-bottom:1vh;padding:1rem">
         </textarea>
     </label>
+</div>
+`
+const gen_ui = `
+<div style="padding:1rem">
+    <form method="post" enctype="multipart/form-data">
+        <input disabled type="file"
+        placeholder="이미지업로드 아직 미지원 입니다."/>
+        <label>loc value <input id="loc_val" type="number"
+         value="0.0" max="3.0" min="-3.0"
+         placeholder="loc 값을 입력하세요"/></label>
+        <label>scale value <input id="scale_val" type="number"
+         value="1.0" max="3.0" min="-3.0"
+         placeholder="scale 값을 입력하세요"/></label>
+    </form>
 </div>
 `
 
