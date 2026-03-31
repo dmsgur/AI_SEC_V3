@@ -2,6 +2,7 @@
 from ai_tools.crypto_coin.coin_model import (time_step,get_datas,preprocessing_datas,
                                              create_datas,convt_data,predict_datas)
 from ai_tools.smithing_anal.sms_model import preprocessing
+from ai_tools.gan_model.gan_model import create_noise
 def get_service_data(service_datas):
     if service_datas["information"] == "coin":
         res_datas = get_datas(service_datas["coin_name"]) # 데이터 다운로드및 추출
@@ -29,3 +30,7 @@ def get_service_data(service_datas):
         #     print(i)
     elif service_datas["information"] == "sms":
         return preprocessing(service_datas["sms_message"])
+    elif service_datas["information"] =="gen":
+        return create_noise(loc=float(service_datas["loc_val"]),
+                            scale=float(service_datas["scale_val"]))
+
